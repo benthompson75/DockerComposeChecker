@@ -5,8 +5,8 @@ This script will scan docker-compose.yml files in a path and check for basic set
 
 TODO List - p = planned, i = in progress, c = completed, x = rejected
   c Check for Static things
-  . Check for Variable things
-  . Output all Variable things
+  i Check for required Variable things
+  i Check and Output all Variable things
   . Enable command line switches to only output specific things
   . Enable command line switch to check only specific file/dir
   . Create help output
@@ -35,6 +35,7 @@ PUID = "1000"
 PGID = "995"
 TZ = "America/New_York"
 UMASK_SET = "022"
+RESTART = "unless-stopped"
 # Ignore "example" docker-compose files
 ignoreexample = True
 
@@ -54,6 +55,7 @@ for cfile in composefiles:
     pgidfound = False
     tzfound = False
     umaskfound = False
+    restartfound = False
     print("\nNow inspecting ", cfile)
     openfile = open(cfile, "r")  # open the file for reading
 
@@ -83,7 +85,7 @@ for cfile in composefiles:
     if tzfound == False:
         print("No TZ defined!")
 
-# Check UMASK - if not present, ignore
+    # Check UMASK - if not present, ignore
     openfile.seek(0)  # reset to top of file
     for umaskline in openfile:
         if re.search(UMASK_SET, umaskline):
@@ -91,6 +93,36 @@ for cfile in composefiles:
             umaskfound = True
     if umaskfound == False:
         print("No UMASK_SET defined! (Optional)")
+
+    # Check restart
+    openfile.seek(0)  # reset to top of file
+    for restartline in openfile:
+        if re.search(RESTART, restartline):
+            # print (line)
+            restartfound = True
+    if restartfound == False:
+        print("No restart unless stopped defined!")
+
+# Check for required varible stuff
+
+    # Check ports
+
+
+    # Check for config volume
+
+
+
+# Check and ouput additional variable stuff
+
+    # Check all volumes
+
+
+    # Check networks
+
+
+    # Check environment vars
+
+
 
 
 # Port check
