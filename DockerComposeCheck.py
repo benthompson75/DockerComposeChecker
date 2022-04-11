@@ -18,7 +18,7 @@ TODO List - p = planned, i = in progress, c = completed, x = rejected
 # import os
 # import glob
 from pathlib import Path  # to get list of files
-import re  # for searching
+import re  # for regex searching
 import sys  # to open the files
 import fnmatch  # to match filenames
 
@@ -103,10 +103,65 @@ for cfile in composefiles:
     if restartfound == False:
         print("No restart unless stopped defined!")
 
+    # Find start of each section
+    openfile.seek(0)  # reset to top of file
+    openfiletxt = openfile.readlines()  # Read the whole file into 1 var
+    # reset line counters
+    sectionstart = 0
+    sectionlinecount = 0
+    for sectionline in openfiletxt:
+        sectionlinecount = sectionlinecount + 1
+        foundsection = re.search('[^:-].*?:\s*', sectionline)
+        if foundsection:
+            print(foundsection.group(0), sectionlinecount)
+            # Add in if/elseif/elseif/else for wanted sections
+            # Ports, Networks, Volumes, Environments
+
+
+
+
 # Check for required varible stuff
-
     # Check ports
+    openfile.seek(0)  # reset to top of file
+    # reset line counters
+    portlinecount = 0
+    portlineinc = 0
+    # Find start of ports section
+    for portsline in openfile:
+        portlinecount = portlinecount + 1
+        section = re.search('[^:-].*?:\s*', portsline)
+        if not isinstance(section, type(None)):
+            print(section.group(0))
+            if section.group(0).lstrip() == "ports:\n":
+                portstart = portlinecount
+                # Find start of next section
+           if re.search('^\s+\w\:', portsline) and not re.search("ports:", portsline) and not re.search('\d+:\d+', portsline):
+                portend = portlinecount
+                print("junk")
+                continue
 
+
+# start_printing =0
+# for line in AllLines
+#    if line contains ^\s*\w+ -and start_printing -eq 1
+#       start_printing = 0
+#       break
+
+#    if start_printing:
+#        print_line()
+
+#    if line contains ^\s+ports:
+#    if line contains $\s+[environment|volumes|ports|networks]:$
+#         start_printing = 1
+
+
+
+
+
+        # Print all lines inbetween
+    while portlineinc < portend:
+        print(openfile)
+        portlineinc = portlineinc + 1
 
     # Check for config volume
 
